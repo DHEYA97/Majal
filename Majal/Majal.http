@@ -1,0 +1,6 @@
+@Majal_HostAddress = http://localhost:5217
+
+GET {{Majal_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
