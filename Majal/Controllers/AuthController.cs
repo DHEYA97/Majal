@@ -14,7 +14,6 @@ namespace Majal.Api.Controllers
             var authResult = await _authService.GetTokenAsync(Request.Email, Request.Password,cancellationToken);
             return authResult.IsSuccess ? Ok(authResult.Value) : authResult.ToProblem();
         }
-        
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest Request, CancellationToken cancellationToken = default)
         {
