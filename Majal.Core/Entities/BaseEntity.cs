@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Majal.Core.Entities.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace Majal.Core.Entities
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public string? UpdatedById { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public ApplicationUser CreatedBy { get; set; } = default!;
+        public ApplicationUser? UpdatedBy { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace Majal.Core.Abstractions.Const.Errors
     public static class EmployeeError
     {
         public static readonly Error EmployeeNotFound =
-           new("Employee.NotFound", "No Employee was found", 404);
+           new("Employee.NotFound", "No Employee was found", StatusCodes.Status404NotFound);
     }
 }

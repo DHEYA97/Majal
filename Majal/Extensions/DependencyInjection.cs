@@ -7,6 +7,17 @@ using Majal.Repository.Repositories;
 using Majal.Repository.UnitOfWork;
 using System.Reflection;
 using Majal.Core.Abstractions;
+using Majal.Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Majal.Core.Interfaces.Authentication;
+using Majal.Service.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Mapster;
+using Majal.Core.Settinges;
+using Hangfire;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Majal.Api.Extensions
 {
@@ -17,7 +28,11 @@ namespace Majal.Api.Extensions
             services.AddControllers();
 
 
-            services.AddDbContextConfig(configuration);
+            services.AddDbContextConfig(configuration)
+                    .AddAuthConfig(configuration)
+                    .AddCorsConfig(configuration)
+                    .AddMailConfig(configuration)
+                    .AddHangFireConfig(configuration);
 
             services.AddSwaggerGen()
                     .AddEndpointsApiExplorer()
@@ -25,8 +40,9 @@ namespace Majal.Api.Extensions
                     .AddMapsterConfig()
                     .AddFluentValidationConfig()
                     .AddServicesConfig()
-                    .AddHandelValidationErrorConfig();
-
+                    .AddHandelValidationErrorConfig()
+                    .AddHttpContextAccessorConfig();
+            
 
             return services;
         }
@@ -63,6 +79,10 @@ namespace Majal.Api.Extensions
             services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEmailSender, EmailService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
         private static IServiceCollection AddHandelValidationErrorConfig(this IServiceCollection services)
@@ -83,6 +103,99 @@ namespace Majal.Api.Extensions
                     return new BadRequestObjectResult(validationResponseError.Errors);
                 };
             });
+            return services;
+        }
+
+        private static IServiceCollection AddIdentityConfig(this IServiceCollection services)
+        {
+            services.Configure<IdentityOptions>(Options =>
+            {
+                Options.Password.RequiredLength = 8;
+                Options.SignIn.RequireConfirmedEmail = true;
+                Options.User.RequireUniqueEmail = true;
+            });
+            return services;
+        }
+        private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddSingleton<IJwtProvider, JwtProvider>();
+
+            //Set Configure og JwtOptions from Appsetting
+
+            services.AddOptions<JwtOptions>()
+                    .BindConfiguration(JwtOptions.SectionName)
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+
+            //Read into JwtOptions from Appsetting
+            var jwtOption = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption!.Key)),
+                    ValidIssuer = jwtOption!.Issuer,
+                    ValidAudience = jwtOption!.Audience
+                };
+            });
+
+
+            //Add Idintity configration
+            services.AddIdentityConfig();
+            return services;
+        }
+        private static IServiceCollection AddCorsConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+           // var allowOrigin = configuration.GetSection("AllowOrigin").Get<string[]>();
+
+
+            services.AddCors(option => {
+                option.AddDefaultPolicy(bulder =>
+                                        bulder.AllowAnyOrigin()
+                                              .AllowAnyMethod()
+                                              .AllowAnyHeader()
+
+                );
+            }
+                             );
+            return services;
+        }
+        private static IServiceCollection AddMailConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<MailSetting>(configuration.GetSection(MailSetting.SectionName));
+            return services;
+        }
+        private static IServiceCollection AddHangFireConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            services.AddHangfire(config => config
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddHangfireServer();
+            return services;
+        }
+        private static IServiceCollection AddHttpContextAccessorConfig(this IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
             return services;
         }
     }

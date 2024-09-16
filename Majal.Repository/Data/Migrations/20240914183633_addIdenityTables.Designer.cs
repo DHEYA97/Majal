@@ -4,6 +4,7 @@ using Majal.Repository.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Majal.Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240914183633_addIdenityTables")]
+    partial class addIdenityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,68 +112,6 @@ namespace Majal.Repository.Data.Migrations
                     b.ToTable("EmployeeDepartments");
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Identity.ApplicationRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "92b75286-d8f8-4061-9995-e6e23ccdee94",
-                            ConcurrencyStamp = "f51e5a91-bced-49c2-8b86-c2e170c0846c",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "9eaa03df-8e4f-4161-85de-0f6e5e30bfd4",
-                            ConcurrencyStamp = "5ee6bc12-5cb0-4304-91e7-6a00744e042a",
-                            IsDefault = true,
-                            IsDeleted = false,
-                            Name = "Member",
-                            NormalizedName = "MEMBER"
-                        },
-                        new
-                        {
-                            Id = "0F99E50D-B7AC-414C-83C9-F7036CD735D0",
-                            ConcurrencyStamp = "06419EB4-5A67-4E86-98CA-85B29EF34909",
-                            IsDefault = true,
-                            IsDeleted = false,
-                            Name = "ContentWriter",
-                            NormalizedName = "CONTENTWRITER"
-                        });
-                });
-
             modelBuilder.Entity("Majal.Core.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -192,15 +133,13 @@ namespace Majal.Repository.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDisabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -246,65 +185,33 @@ namespace Majal.Repository.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "6dc6528a-b280-4770-9eae-82671ee81ef7",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "99d2bbc6-bc54-4248-a172-a77de3ae4430",
-                            Email = "admin@majal.com",
-                            EmailConfirmed = true,
-                            FirstName = "Admin",
-                            IsDisabled = false,
-                            LastName = "Majal",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@MAJAL.COM",
-                            NormalizedUserName = "ADMIN@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIs0MM9znH/mlULKgNSryXYQv2WcpeDB+mmBdEdWN2eqKhC7xJpDtxfZtIGx0l6PEw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "55BF92C9EF0249CDA210D85D1A851BC9",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@majal.com"
-                        },
-                        new
-                        {
-                            Id = "7905b7d2-1010-440c-bc43-a3839e864aaf",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "fb1072bb-6cf8-426b-84bd-0133045dfe91",
-                            Email = "member@majal.com",
-                            EmailConfirmed = true,
-                            FirstName = "Member",
-                            IsDisabled = false,
-                            LastName = "Majal",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MEMBER@MAJAL.COM",
-                            NormalizedUserName = "MEMBER@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGPCxBHHzqpTdNd6RsjoXvnqdm5T+m28bDRFiKEawLhwwLomAYtVqwfz4pyA8HEhXQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "78356252-8c27-4c09-8e16-34b5210ccf89",
-                            TwoFactorEnabled = false,
-                            UserName = "member@majal.com"
-                        },
-                        new
-                        {
-                            Id = "89c3955b-145f-4928-9261-a3bba73c43be",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c41ca1ca-d166-4c9a-977a-19feea318fe0",
-                            Email = "content@majal.com",
-                            EmailConfirmed = true,
-                            FirstName = "ContentWriter",
-                            IsDisabled = false,
-                            LastName = "Majal",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CONTENT@MAJAL.COM",
-                            NormalizedUserName = "CONTENT@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFeBmogyAParP20OLckKht8+8T806SyGlPGfuDd/LDCVYe+Ez36J2EZEcREAfi8DEw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "264aa87f-6f29-4542-a4e6-9743d7078549",
-                            TwoFactorEnabled = false,
-                            UserName = "content@majal.com"
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -392,23 +299,6 @@ namespace Majal.Repository.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "6dc6528a-b280-4770-9eae-82671ee81ef7",
-                            RoleId = "92b75286-d8f8-4061-9995-e6e23ccdee94"
-                        },
-                        new
-                        {
-                            UserId = "7905b7d2-1010-440c-bc43-a3839e864aaf",
-                            RoleId = "9eaa03df-8e4f-4161-85de-0f6e5e30bfd4"
-                        },
-                        new
-                        {
-                            UserId = "89c3955b-145f-4928-9261-a3bba73c43be",
-                            RoleId = "0F99E50D-B7AC-414C-83C9-F7036CD735D0"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -485,7 +375,7 @@ namespace Majal.Repository.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Majal.Core.Entities.Identity.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -512,7 +402,7 @@ namespace Majal.Repository.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Majal.Core.Entities.Identity.ApplicationRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

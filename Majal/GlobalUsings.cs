@@ -12,4 +12,4 @@ global using Majal.Core.Contract;
 global using Majal.Core.Entities;
 
 global using Majal.Service;
-
+global using Majal.Core.Interfaces.Service;
