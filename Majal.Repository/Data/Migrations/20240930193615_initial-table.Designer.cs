@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Majal.Repository.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240930192410_initial-Type")]
-    partial class initialType
+    [Migration("20240930193615_initial-table")]
+    partial class initialtable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,38 @@ namespace Majal.Repository.Data.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("Majal.Core.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("Majal.Core.Entities.Feature", b =>
                 {
                     b.Property<int>("Id")
@@ -102,7 +134,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Feature");
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Identity.ApplicationRole", b =>
@@ -257,7 +289,7 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAJAL.COM",
                             NormalizedUserName = "ADMIN@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECB9CtpEQ6RmGux84bsXh9jUJ8PLoYX0Ms8So6OvgDPXth4CZX0OeO5Da/KcAmcBVw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIyfy/8FeBx3WHcr8Ujn9KVpqUcGiOMGGoiN7bynqY/FpiLTulC3+VChp445CipLpA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "55BF92C9EF0249CDA210D85D1A851BC9",
                             TwoFactorEnabled = false,
@@ -276,7 +308,7 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MEMBER@MAJAL.COM",
                             NormalizedUserName = "MEMBER@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMRh9zNNbO+qHkF3RkrkrMK0eCwVLyOeQx3LqAd5/6rEQM+gFEOh79XcQZr28Cz8yQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMwUQrBeVauDj3rodYHAH/ba3a3EBWK/fCmDh3u+xG+fs6aV+Y7ILOngZT6UTjnyIw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "78356252-8c27-4c09-8e16-34b5210ccf89",
                             TwoFactorEnabled = false,
@@ -295,7 +327,7 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CONTENT@MAJAL.COM",
                             NormalizedUserName = "CONTENT@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAC/czDzYjzWlpd1oMlZkbP69+eLEM70tRbZBd4PoiP8SbFT8Biey8C5ZpNBCtiT+Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGLTZqVMxjSj40bKU48YuOm3ZwCb3afVo30MwQsOfR+rHrJu01A2m+c/SB3HfA+bKw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "264aa87f-6f29-4542-a4e6-9743d7078549",
                             TwoFactorEnabled = false,
@@ -475,7 +507,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("PostCategories");
+                    b.ToTable("PostCategorys");
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.SystemImage", b =>

@@ -8,8 +8,8 @@ namespace Majal.Api.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<Employee, EmployeeResponse>()
-                  .Map(des => des.Departments, src => src.Departments.Select(x => x.Department.Name));
+            //config.NewConfig<Employee, EmployeeResponse>()
+            //      .Map(des => des.Departments, src => src.Departments.Select(x => x.Department.Name));
 
             config.NewConfig<RegisterRequest, ApplicationUser>()
             .Map(dest => dest.UserName, src => src.Email);

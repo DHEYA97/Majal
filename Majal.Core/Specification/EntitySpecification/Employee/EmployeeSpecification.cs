@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Majal.Core.Specification.EntitySpecification
 {
-    public class EmployeeSpecification : BaseSpecification<Employee>
+    public class EmployeeSpecification //: BaseSpecification<Employee>
     {
-        public EmployeeSpecification(int Id) : base(e => e.Id == Id)
-        {
-            Includes.Add(p => p.Departments);
+        //public EmployeeSpecification(int Id) : base(e => e.Id == Id)
+        //{
+        //    Includes.Add(p => p.Departments);
 
-            ThenIncludes.Add(query => query
-            .Include(e => e.Departments)
-            .ThenInclude(ed => ed.Department));
-        }
+        //    ThenIncludes.Add(query => query
+        //    .Include(e => e.Departments)
+        //    .ThenInclude(ed => ed.Department));
+        //}
     }
 }

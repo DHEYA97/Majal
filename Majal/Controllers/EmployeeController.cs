@@ -8,15 +8,15 @@ namespace Majal.Api.Controllers
     [ApiController]
     public class EmployeeController(IEmployeeService employeeService) : ControllerBase
     {
-        private readonly IEmployeeService _employeeService = employeeService;
-        [HttpGet("{id}")]
-        [Authorize(Roles =DefaultRoles.Admin)]
-        public  async Task<IActionResult> get([FromRoute]int id)
-        {
-            var employee = await _employeeService.GetEmployeeByIsAsync(new EmployeeSpecification(id));
+        //private readonly IEmployeeService _employeeService = employeeService;
+        //[HttpGet("{id}")]
+        //[Authorize(Roles =DefaultRoles.Admin)]
+        //public  async Task<IActionResult> get([FromRoute]int id)
+        //{
+        //    var employee = await _employeeService.GetEmployeeByIsAsync(new EmployeeSpecification(id));
             
-            return employee.IsSuccess ? Ok(employee.Value.Adapt<EmployeeResponse>())
-                                      : employee.ToProblem();
-        }
+        //    return employee.IsSuccess ? Ok(employee.Value.Adapt<EmployeeResponse>())
+        //                              : employee.ToProblem();
+        //}
     }
 }

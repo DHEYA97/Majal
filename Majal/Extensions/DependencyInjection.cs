@@ -78,7 +78,7 @@ namespace Majal.Api.Extensions
         {
             services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            //services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSender, EmailService>();
             services.AddScoped<IRoleService, RoleService>();

@@ -6,6 +6,6 @@ namespace Majal.Core.Interfaces.Service
 {
     public interface IEmployeeService
     {
-        Task<Result<Employee>> GetEmployeeByIsAsync(EmployeeSpecification spe);
+        //Task<Result<Employee>> GetEmployeeByIsAsync(EmployeeSpecification spe);
     }
 }

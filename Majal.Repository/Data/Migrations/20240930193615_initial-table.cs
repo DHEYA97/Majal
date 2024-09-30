@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Majal.Repository.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialType : Migration
+    public partial class initialtable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,23 @@ namespace Majal.Repository.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,7 +210,7 @@ namespace Majal.Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostCategories",
+                name: "PostCategorys",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -206,15 +223,15 @@ namespace Majal.Repository.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostCategories", x => x.Id);
+                    table.PrimaryKey("PK_PostCategorys", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostCategories_AspNetUsers_CreatedById",
+                        name: "FK_PostCategorys_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PostCategories_AspNetUsers_UpdatedById",
+                        name: "FK_PostCategorys_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
@@ -328,15 +345,15 @@ namespace Majal.Repository.Data.Migrations
                         principalTable: "Images",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Posts_PostCategories_PostCategoryId",
+                        name: "FK_Posts_PostCategorys_PostCategoryId",
                         column: x => x.PostCategoryId,
-                        principalTable: "PostCategories",
+                        principalTable: "PostCategorys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Feature",
+                name: "Features",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -350,20 +367,20 @@ namespace Majal.Repository.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Feature", x => x.Id);
+                    table.PrimaryKey("PK_Features", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Feature_AspNetUsers_CreatedById",
+                        name: "FK_Features_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Feature_AspNetUsers_UpdatedById",
+                        name: "FK_Features_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Feature_OurSystems_OurSystemId",
+                        name: "FK_Features_OurSystems_OurSystemId",
                         column: x => x.OurSystemId,
                         principalTable: "OurSystems",
                         principalColumn: "Id",
@@ -409,9 +426,9 @@ namespace Majal.Repository.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsDisabled", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6dc6528a-b280-4770-9eae-82671ee81ef7", 0, "99d2bbc6-bc54-4248-a172-a77de3ae4430", "admin@majal.com", true, "Admin", false, "Majal", false, null, "ADMIN@MAJAL.COM", "ADMIN@MAJAL.COM", "AQAAAAIAAYagAAAAECB9CtpEQ6RmGux84bsXh9jUJ8PLoYX0Ms8So6OvgDPXth4CZX0OeO5Da/KcAmcBVw==", null, false, "55BF92C9EF0249CDA210D85D1A851BC9", false, "admin@majal.com" },
-                    { "7905b7d2-1010-440c-bc43-a3839e864aaf", 0, "fb1072bb-6cf8-426b-84bd-0133045dfe91", "member@majal.com", true, "Member", false, "Majal", false, null, "MEMBER@MAJAL.COM", "MEMBER@MAJAL.COM", "AQAAAAIAAYagAAAAEMRh9zNNbO+qHkF3RkrkrMK0eCwVLyOeQx3LqAd5/6rEQM+gFEOh79XcQZr28Cz8yQ==", null, false, "78356252-8c27-4c09-8e16-34b5210ccf89", false, "member@majal.com" },
-                    { "89c3955b-145f-4928-9261-a3bba73c43be", 0, "c41ca1ca-d166-4c9a-977a-19feea318fe0", "content@majal.com", true, "ContentWriter", false, "Majal", false, null, "CONTENT@MAJAL.COM", "CONTENT@MAJAL.COM", "AQAAAAIAAYagAAAAEAC/czDzYjzWlpd1oMlZkbP69+eLEM70tRbZBd4PoiP8SbFT8Biey8C5ZpNBCtiT+Q==", null, false, "264aa87f-6f29-4542-a4e6-9743d7078549", false, "content@majal.com" }
+                    { "6dc6528a-b280-4770-9eae-82671ee81ef7", 0, "99d2bbc6-bc54-4248-a172-a77de3ae4430", "admin@majal.com", true, "Admin", false, "Majal", false, null, "ADMIN@MAJAL.COM", "ADMIN@MAJAL.COM", "AQAAAAIAAYagAAAAEIyfy/8FeBx3WHcr8Ujn9KVpqUcGiOMGGoiN7bynqY/FpiLTulC3+VChp445CipLpA==", null, false, "55BF92C9EF0249CDA210D85D1A851BC9", false, "admin@majal.com" },
+                    { "7905b7d2-1010-440c-bc43-a3839e864aaf", 0, "fb1072bb-6cf8-426b-84bd-0133045dfe91", "member@majal.com", true, "Member", false, "Majal", false, null, "MEMBER@MAJAL.COM", "MEMBER@MAJAL.COM", "AQAAAAIAAYagAAAAEMwUQrBeVauDj3rodYHAH/ba3a3EBWK/fCmDh3u+xG+fs6aV+Y7ILOngZT6UTjnyIw==", null, false, "78356252-8c27-4c09-8e16-34b5210ccf89", false, "member@majal.com" },
+                    { "89c3955b-145f-4928-9261-a3bba73c43be", 0, "c41ca1ca-d166-4c9a-977a-19feea318fe0", "content@majal.com", true, "ContentWriter", false, "Majal", false, null, "CONTENT@MAJAL.COM", "CONTENT@MAJAL.COM", "AQAAAAIAAYagAAAAEGLTZqVMxjSj40bKU48YuOm3ZwCb3afVo30MwQsOfR+rHrJu01A2m+c/SB3HfA+bKw==", null, false, "264aa87f-6f29-4542-a4e6-9743d7078549", false, "content@majal.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -481,18 +498,18 @@ namespace Majal.Repository.Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feature_CreatedById",
-                table: "Feature",
+                name: "IX_Features_CreatedById",
+                table: "Features",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feature_OurSystemId",
-                table: "Feature",
+                name: "IX_Features_OurSystemId",
+                table: "Features",
                 column: "OurSystemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feature_UpdatedById",
-                table: "Feature",
+                name: "IX_Features_UpdatedById",
+                table: "Features",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -522,13 +539,13 @@ namespace Majal.Repository.Data.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCategories_CreatedById",
-                table: "PostCategories",
+                name: "IX_PostCategorys_CreatedById",
+                table: "PostCategorys",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCategories_UpdatedById",
-                table: "PostCategories",
+                name: "IX_PostCategorys_UpdatedById",
+                table: "PostCategorys",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -581,7 +598,10 @@ namespace Majal.Repository.Data.Migrations
                 name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Feature");
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Features");
 
             migrationBuilder.DropTable(
                 name: "Posts");
@@ -593,7 +613,7 @@ namespace Majal.Repository.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "PostCategories");
+                name: "PostCategorys");
 
             migrationBuilder.DropTable(
                 name: "OurSystems");

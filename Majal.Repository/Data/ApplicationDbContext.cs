@@ -12,9 +12,14 @@ namespace Majal.Repository.Persistence
     {
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<EmployeeDepartment> EmployeeDepartments { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<OurSystem> OurSystems { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostCategory> PostCategorys { get; set; }
+        public DbSet<SystemImage> SystemImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

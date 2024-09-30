@@ -22,7 +22,7 @@ namespace Majal.Repository.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Majal.Core.Entities.Department", b =>
+            modelBuilder.Entity("Majal.Core.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,6 +36,9 @@ namespace Majal.Repository.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,18 +54,58 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
+
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Employee", b =>
+            modelBuilder.Entity("Majal.Core.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Feature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedById")
                         .IsRequired()
@@ -71,13 +114,8 @@ namespace Majal.Repository.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DateOfBarth")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OurSystemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdatedById")
                         .HasColumnType("nvarchar(450)");
@@ -89,24 +127,11 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
+                    b.HasIndex("OurSystemId");
+
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("Majal.Core.Entities.EmployeeDepartment", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmployeeId", "DepartmentId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("EmployeeDepartments");
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Identity.ApplicationRole", b =>
@@ -261,7 +286,7 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAJAL.COM",
                             NormalizedUserName = "ADMIN@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIs0MM9znH/mlULKgNSryXYQv2WcpeDB+mmBdEdWN2eqKhC7xJpDtxfZtIGx0l6PEw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIyfy/8FeBx3WHcr8Ujn9KVpqUcGiOMGGoiN7bynqY/FpiLTulC3+VChp445CipLpA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "55BF92C9EF0249CDA210D85D1A851BC9",
                             TwoFactorEnabled = false,
@@ -280,7 +305,7 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MEMBER@MAJAL.COM",
                             NormalizedUserName = "MEMBER@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGPCxBHHzqpTdNd6RsjoXvnqdm5T+m28bDRFiKEawLhwwLomAYtVqwfz4pyA8HEhXQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMwUQrBeVauDj3rodYHAH/ba3a3EBWK/fCmDh3u+xG+fs6aV+Y7ILOngZT6UTjnyIw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "78356252-8c27-4c09-8e16-34b5210ccf89",
                             TwoFactorEnabled = false,
@@ -299,12 +324,202 @@ namespace Majal.Repository.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CONTENT@MAJAL.COM",
                             NormalizedUserName = "CONTENT@MAJAL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFeBmogyAParP20OLckKht8+8T806SyGlPGfuDd/LDCVYe+Ez36J2EZEcREAfi8DEw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGLTZqVMxjSj40bKU48YuOm3ZwCb3afVo30MwQsOfR+rHrJu01A2m+c/SB3HfA+bKw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "264aa87f-6f29-4542-a4e6-9743d7078549",
                             TwoFactorEnabled = false,
                             UserName = "content@majal.com"
                         });
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.OurSystem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DemoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasDemo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MainContentMedia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MainImageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("MainImageId")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("OurSystems");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
+
+                    b.HasIndex("PostCategoryId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.PostCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("PostCategorys");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.SystemImage", b =>
+                {
+                    b.Property<int>("OurSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OurSystemId", "ImageId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("SystemImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -430,7 +645,55 @@ namespace Majal.Repository.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Department", b =>
+            modelBuilder.Entity("Majal.Core.Entities.Client", b =>
+                {
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Image", "Image")
+                        .WithOne()
+                        .HasForeignKey("Majal.Core.Entities.Client", "ImageId");
+
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Feature", b =>
+                {
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.OurSystem", "OurSystem")
+                        .WithMany("Features")
+                        .HasForeignKey("OurSystemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("OurSystem");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Image", b =>
                 {
                     b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
                         .WithMany()
@@ -447,7 +710,63 @@ namespace Majal.Repository.Data.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Employee", b =>
+            modelBuilder.Entity("Majal.Core.Entities.OurSystem", b =>
+                {
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Image", "Image")
+                        .WithOne()
+                        .HasForeignKey("Majal.Core.Entities.OurSystem", "MainImageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.Post", b =>
+                {
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Image", "Image")
+                        .WithOne()
+                        .HasForeignKey("Majal.Core.Entities.Post", "ImageId");
+
+                    b.HasOne("Majal.Core.Entities.PostCategory", "PostCategory")
+                        .WithMany("posts")
+                        .HasForeignKey("PostCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("PostCategory");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Majal.Core.Entities.PostCategory", b =>
                 {
                     b.HasOne("Majal.Core.Entities.Identity.ApplicationUser", "CreatedBy")
                         .WithMany()
@@ -464,23 +783,23 @@ namespace Majal.Repository.Data.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.EmployeeDepartment", b =>
+            modelBuilder.Entity("Majal.Core.Entities.SystemImage", b =>
                 {
-                    b.HasOne("Majal.Core.Entities.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("Majal.Core.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Majal.Core.Entities.Employee", "Employee")
-                        .WithMany("Departments")
-                        .HasForeignKey("EmployeeId")
+                    b.HasOne("Majal.Core.Entities.OurSystem", "OurSystem")
+                        .WithMany("SystemImages")
+                        .HasForeignKey("OurSystemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Department");
+                    b.Navigation("Image");
 
-                    b.Navigation("Employee");
+                    b.Navigation("OurSystem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -534,14 +853,16 @@ namespace Majal.Repository.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Department", b =>
+            modelBuilder.Entity("Majal.Core.Entities.OurSystem", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("Features");
+
+                    b.Navigation("SystemImages");
                 });
 
-            modelBuilder.Entity("Majal.Core.Entities.Employee", b =>
+            modelBuilder.Entity("Majal.Core.Entities.PostCategory", b =>
                 {
-                    b.Navigation("Departments");
+                    b.Navigation("posts");
                 });
 #pragma warning restore 612, 618
         }
