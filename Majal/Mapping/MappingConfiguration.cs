@@ -1,6 +1,8 @@
 ﻿using Majal.Core.Entities.Identity;
 using Majal.Core.Contract.Auth;
 using Majal.Core.Contract.Auth.User;
+using Majal.Core.Contract.Client;
+using Majal.Core.Contract.OurSystem;
 
 namespace Majal.Api.Mapping
 {
@@ -8,8 +10,8 @@ namespace Majal.Api.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            //config.NewConfig<Employee, EmployeeResponse>()
-            //      .Map(des => des.Departments, src => src.Departments.Select(x => x.Department.Name));
+            config.NewConfig<Client, ClientResponse>()
+                  .Map(des => des.Url, src => src.Image.Url);
 
             config.NewConfig<RegisterRequest, ApplicationUser>()
             .Map(dest => dest.UserName, src => src.Email);
@@ -25,6 +27,14 @@ namespace Majal.Api.Mapping
             config.NewConfig<UpdateUserRequest, ApplicationUser>()
                 .Map(des => des.UserName, src => src.Email)
                 .Map(des => des.NormalizedUserName, src => src.Email.ToUpper());
+
+
+            config.NewConfig<OurSystem, OurSystemsResponse>()
+                  .Map(des => des.MainImage, src => src.Image.Url);
+
+            config.NewConfig<OurSystem, OurSystemResponse>()
+                  .Map(des => des.SystemImages, src => src.SystemImages.Select(x => x.Image.Url))
+                  .Map(des => des.Features, src => src.Features.Select(x => x.Content));
         }
     }
 }

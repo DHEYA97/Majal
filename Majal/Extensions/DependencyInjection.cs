@@ -18,6 +18,8 @@ using Mapster;
 using Majal.Core.Settinges;
 using Hangfire;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Majal.Core.Contract.Client;
+using Majal.Core.Contract.Auth;
 
 namespace Majal.Api.Extensions
 {
@@ -36,11 +38,11 @@ namespace Majal.Api.Extensions
 
             services.AddSwaggerGen()
                     .AddEndpointsApiExplorer()
-                    .AddExceptionHandlerConfig()
                     .AddMapsterConfig()
                     .AddFluentValidationConfig()
                     .AddServicesConfig()
                     .AddHandelValidationErrorConfig()
+                    .AddExceptionHandlerConfig()
                     .AddHttpContextAccessorConfig();
             
 
@@ -69,16 +71,20 @@ namespace Majal.Api.Extensions
         }
         private static IServiceCollection AddFluentValidationConfig(this IServiceCollection services)
         {
-            // Add FluentValidation
             services.AddFluentValidationAutoValidation()
-                    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                    .AddFluentValidationClientsideAdapters();
+            
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(typeof(LoginRequestValidation).Assembly);
             return services;
         }
         private static IServiceCollection AddServicesConfig(this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IOurSystemService, OurSystemService>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSender, EmailService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -88,22 +94,35 @@ namespace Majal.Api.Extensions
         private static IServiceCollection AddHandelValidationErrorConfig(this IServiceCollection services)
         {
             //Add Validation Error
-            services.Configure<ApiBehaviorOptions>(option =>
+            services.Configure<ApiBehaviorOptions>(options =>
             {
-                option.InvalidModelStateResponseFactory = (actionContext) =>
+                options.InvalidModelStateResponseFactory = (actionContext) =>
                 {
-                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
-                                                         .SelectMany(p => p.Value.Errors)
-                                                         .Select(p => p.ErrorMessage).ToList();
-                    var validationResponseError = Result.FailureList(
-                                                             errors.Select(x =>
-                                                             new Error(StatusCodes.Status409Conflict.ToString(), x, 404)
-                                                         ).ToList());
-                    
-                    return new BadRequestObjectResult(validationResponseError.Errors);
+                    // Extract validation errors from the ModelState
+                    var errors = actionContext.ModelState
+                        .Where(p => p.Value.Errors.Count > 0)
+                        .SelectMany(p => p.Value.Errors)
+                        .Select(p => p.ErrorMessage)
+                        .ToList();
+
+                    // Create the validation response object
+                    var validationResponseError = new
+                    {
+                        Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                        Title = "One or more validation errors occurred.",
+                        Status = StatusCodes.Status400BadRequest,
+                        Errors = errors.GroupBy(e => e) // Grouping errors if needed
+                                        .ToDictionary(g => g.Key, g => g.ToList()),
+                        TraceId = actionContext.HttpContext.TraceIdentifier
+                    };
+
+                    // Return the validation error response
+                    return new BadRequestObjectResult(validationResponseError);
                 };
             });
+
             return services;
+
         }
 
         private static IServiceCollection AddIdentityConfig(this IServiceCollection services)

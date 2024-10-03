@@ -28,6 +28,7 @@ namespace Majal
             app.UseStatusCodePagesWithReExecute("/ErroresNotFound/{0}");
             app.UseHttpsRedirection();
             app.UseCors();
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization(); 
             app.UseHangfireDashboard("/jobs", new DashboardOptions
