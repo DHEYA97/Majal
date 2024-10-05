@@ -2,6 +2,7 @@
 {
     public class OurSystem : BaseEntity
     {
+        private bool _hasDemo;
         public string Name { get; set; }
         public string MainContentMedia { get; set; }
         public string Content { get; set; }
@@ -10,6 +11,10 @@
             get
             {
                 return !string.IsNullOrEmpty(DemoUrl);
+            }
+            set
+            {
+                _hasDemo = !string.IsNullOrEmpty(DemoUrl);
             }
         }
         public string? DemoUrl { get; set; }

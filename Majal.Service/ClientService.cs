@@ -11,6 +11,7 @@ using Majal.Core.UnitOfWork;
 using Mapster;
 using Microsoft.AspNetCore.Builder;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 namespace Majal.Service
 {
@@ -32,53 +33,108 @@ namespace Majal.Service
             var response = client.Adapt<ClientResponse>();
             return Result.Success(response);
         }
-        public async Task<Result> UpdateAsync(ClientRequest request,ClientSpecification sp)
+      
+      public async Task<Result> UpdateAsync(ClientRequest request, ClientSpecification sp)
         {
-            var client = await _unitOfWork.Repositories<Client>().GetByIdWithSpecificationAsync(sp);
-            if(client is null)
-                return Result.Failure(ClientError.ClientNotFound);
-            
-            client.Name = request.Name;
-            if(!string.IsNullOrWhiteSpace(request.Url))
+            // بدء المعاملة
+            await _unitOfWork.BeginTransactionAsync();
+            string url = string.Empty;
+            try
             {
+                var client = await _unitOfWork.Repositories<Client>().GetByIdWithSpecificationAsync(sp);
+                if (client is null)
+                    return Result.Failure(ClientError.ClientNotFound);
+
+                client.Name = request.Name;
+
+                // حفظ أو تحديث الصورة
                 
-                string url = "";
-                if (!string.IsNullOrWhiteSpace(client.Image.Url))
+                if (!string.IsNullOrWhiteSpace(request.Url))
                 {
-                    url = await _imageService.UpdateImageAsync(client.Image.Id, request.Url, nameof(client));
+                    if (!string.IsNullOrWhiteSpace(client.Image.Url))
+                    {
+                        url = await _imageService.UpdateImageAsync(client.Image.Id, request.Url, nameof(client));
+                    }
+                    else
+                    {
+                        url = await _imageService.SaveImageAsync(request.Url, nameof(client));
+                    }
+                    client.Image.Url = url;
                 }
-                else
-                {
-                    url = await _imageService.SaveImageAsync(request.Url, nameof(client));
-                }
-                client.Image.Url = url;
+
+                // تحديث الكائن
+                _unitOfWork.Repositories<Client>().Update(client);
+                await _unitOfWork.CompleteAsync();
+
+                // تأكيد المعاملة
+                await _unitOfWork.CommitTransactionAsync();
+                return Result.Success();
             }
-            _unitOfWork.Repositories<Client>().Update(client);
-            await _unitOfWork.CompleteAsync();
-            return Result.Success();
+            catch (Exception)
+            {
+                // إلغاء المعاملة في حالة حدوث خطأ
+                await _unitOfWork.RollbackTransactionAsync();
+
+                // حذف الصورة في حال حدوث خطأ
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    await _imageService.DeleteImageAsync(url);
+                }
+
+                return Result.Failure(new Error("حصل خطأ", "حصل خطأ", 404));
+            }
         }
+
         public async Task<Result> AddAsync(ClientRequest request, ClientSpecification sp)
         {
-            var isClientFound = await _unitOfWork.Repositories<Client>().GetByIdWithSpecificationAsync(sp);
-            if (isClientFound is not null)
-                return Result.Failure(ClientError.ClientNotFound);
-            var client = new Client
+            // بدء المعاملة
+            await _unitOfWork.BeginTransactionAsync();
+            string url = string.Empty;
+            try
             {
-                Name = request.Name,
-            };
-            if (!string.IsNullOrWhiteSpace(request.Url))
-            {
-                var url = await _imageService.SaveImageAsync(request.Url, nameof(Client));
-                client.Image = new Image()
+                var isClientFound = await _unitOfWork.Repositories<Client>().GetByIdWithSpecificationAsync(sp);
+                if (isClientFound is not null)
+                    return Result.Failure(ClientError.ClientNotFound);
+
+                var client = new Client
                 {
-                    Url = url,
-                    Type = ImageType.Client
+                    Name = request.Name,
                 };
+
+                // حفظ الصورة
+                if (!string.IsNullOrWhiteSpace(request.Url))
+                {
+                    url = await _imageService.SaveImageAsync(request.Url, nameof(Client));
+                    client.Image = new Image()
+                    {
+                        Url = url,
+                        Type = ImageType.Client
+                    };
+                }
+
+                // إضافة العميل
+                await _unitOfWork.Repositories<Client>().AddAsync(client);
+                await _unitOfWork.CompleteAsync();
+
+                // تأكيد المعاملة
+                await _unitOfWork.CommitTransactionAsync();
+                return Result.Success();
             }
-            await _unitOfWork.Repositories<Client>().AddAsync(client);
-            await _unitOfWork.CompleteAsync();
-            return Result.Success();
+            catch (Exception)
+            {
+                // إلغاء المعاملة في حالة حدوث خطأ
+                await _unitOfWork.RollbackTransactionAsync();
+
+                // حذف الصورة في حال حدوث خطأ
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    await _imageService.DeleteImageAsync(url);
+                }
+
+                return Result.Failure(new Error("حصل خطأ", "حصل خطأ", 404));
+            }
         }
+
         public async Task<Result> DeleteAsync(ClientSpecification sp)
         {
             var client = await _unitOfWork.Repositories<Client>().GetByIdWithSpecificationAsync(sp);

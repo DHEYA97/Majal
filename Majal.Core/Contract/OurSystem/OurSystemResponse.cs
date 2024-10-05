@@ -10,6 +10,7 @@ namespace Majal.Core.Contract.OurSystem
     (
         int Id,
         string Name,
+        string MainImage,
         string MainContentMedia,
         string Content,
         bool HasDemo,

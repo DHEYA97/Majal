@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Majal.Core.Interfaces.Repositories
 {
-    public interface IGenericRepositories<T> where T : BaseEntity
+    public interface IGenericRepositories<T> where T : class
     {
         Task<T?> GetByIdAsync(int Id);
         Task<IEnumerable<T?>> GetAllAsync();

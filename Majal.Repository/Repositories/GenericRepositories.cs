@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Majal.Repository.Repositories
 {
-    public class GenericRepositories<T>(ApplicationDbContext context) : IGenericRepositories<T> where T : BaseEntity
+    public class GenericRepositories<T>(ApplicationDbContext context) : IGenericRepositories<T> where T : class
     {
         private readonly ApplicationDbContext _context = context;
         

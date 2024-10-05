@@ -85,6 +85,8 @@ namespace Majal.Api.Extensions
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IOurSystemService, OurSystemService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IPostCategoryService, PostCategoryService>();
+            services.AddScoped<IPostService, PostService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailSender, EmailService>();
             services.AddScoped<IRoleService, RoleService>();

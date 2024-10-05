@@ -60,7 +60,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Customer", b =>
@@ -92,7 +92,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Feature", b =>
@@ -131,7 +131,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Features");
+                    b.ToTable("Features", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Identity.ApplicationRole", b =>
@@ -366,7 +366,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.OurSystem", b =>
@@ -420,7 +420,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("OurSystems");
+                    b.ToTable("OurSystems", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.Post", b =>
@@ -470,7 +470,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.PostCategory", b =>
@@ -504,7 +504,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("PostCategorys");
+                    b.ToTable("PostCategorys", (string)null);
                 });
 
             modelBuilder.Entity("Majal.Core.Entities.SystemImage", b =>
@@ -519,7 +519,7 @@ namespace Majal.Repository.Data.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("SystemImages");
+                    b.ToTable("SystemImages", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

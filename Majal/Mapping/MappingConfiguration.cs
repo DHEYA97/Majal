@@ -3,6 +3,7 @@ using Majal.Core.Contract.Auth;
 using Majal.Core.Contract.Auth.User;
 using Majal.Core.Contract.Client;
 using Majal.Core.Contract.OurSystem;
+using Majal.Core.Contract.Post;
 
 namespace Majal.Api.Mapping
 {
@@ -33,8 +34,21 @@ namespace Majal.Api.Mapping
                   .Map(des => des.MainImage, src => src.Image.Url);
 
             config.NewConfig<OurSystem, OurSystemResponse>()
+                  .Map(des => des.MainImage, src => src.Image.Url)
                   .Map(des => des.SystemImages, src => src.SystemImages.Select(x => x.Image.Url))
                   .Map(des => des.Features, src => src.Features.Select(x => x.Content));
+
+            config.NewConfig<OurSystemRequest, OurSystem>()
+                 .Ignore(x => x.HasDemo)
+                 .Ignore(x => x.Features)
+                 .Ignore(x => x.SystemImages);
+
+
+            config.NewConfig<Post, PostResponse>()
+                  .Map(des => des.PostCategory, src => src.PostCategory.Name)
+                  .Map(des => des.Url, src => src.Image.Url)
+                  .Map(des => des.CreatedBy, src => $"{src.CreatedBy.FirstName} {src.CreatedBy.LastName}");
+
         }
     }
 }

@@ -8,10 +8,9 @@ namespace Majal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController(IClientService clientService,IImageService imageService) : ControllerBase
+    public class ClientController(IClientService clientService) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;
-        private readonly IImageService _imageService = imageService;
         
         [HttpGet("{Id}")]
         [Authorize(Roles = DefaultRoles.Admin)]
@@ -34,24 +33,24 @@ namespace Majal.Api.Controllers
         [Authorize(Roles = DefaultRoles.Admin)]
         public async Task<IActionResult> Update([FromBody] ClientRequest request)
         {
-            var isClientUpdated = await _clientService.UpdateAsync(request, new ClientSpecification(request.Id));
-            return isClientUpdated.IsSuccess ? NoContent() : isClientUpdated.ToProblem();
+            var clientResult = await _clientService.UpdateAsync(request, new ClientSpecification(request.Id));
+            return clientResult.IsSuccess ? NoContent() : clientResult.ToProblem();
         }
         
         [HttpPost("")]
         [Authorize(Roles = DefaultRoles.Admin)]
         public async Task<IActionResult> Add([FromBody] ClientRequest request)
         {
-            var isClientUpdated = await _clientService.AddAsync(request, new ClientSpecification(request.Id));
-            return isClientUpdated.IsSuccess ? NoContent() : isClientUpdated.ToProblem();
+            var clientResult = await _clientService.AddAsync(request, new ClientSpecification(request.Id));
+            return clientResult.IsSuccess ? NoContent() : clientResult.ToProblem();
         }
         
         [HttpDelete("{id}")]
         [Authorize(Roles = DefaultRoles.Admin)]
         public async Task<IActionResult> Delete([FromRoute] int Id)
         {
-            var isClientUpdated = await _clientService.DeleteAsync(new ClientSpecification(Id));
-            return isClientUpdated.IsSuccess ? NoContent() : isClientUpdated.ToProblem();
+            var clientResult = await _clientService.DeleteAsync(new ClientSpecification(Id));
+            return clientResult.IsSuccess ? NoContent() : clientResult.ToProblem();
         }
     }
 }

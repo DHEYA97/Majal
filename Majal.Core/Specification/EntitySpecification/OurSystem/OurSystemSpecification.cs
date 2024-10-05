@@ -20,7 +20,8 @@ namespace Majal.Core.Specification.EntitySpecification
         public OurSystemSpecification(int? id) : base(x => x.Id == id)
         {
             Includes.Add(i => i.Features);
-         
+            Includes.Add(i => i.Image);
+
             ThenIncludes.Add(query => query
                         .Include(e => e.SystemImages)
                         .ThenInclude(ed => ed.Image));

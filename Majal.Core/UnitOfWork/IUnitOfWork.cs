@@ -10,7 +10,10 @@ namespace Majal.Core.UnitOfWork
 {
     public interface IUnitOfWork : IAsyncDisposable
     {
-        IGenericRepositories<TEntity> Repositories<TEntity>() where TEntity : BaseEntity;
+        IGenericRepositories<TEntity> Repositories<TEntity>() where TEntity : class;
         Task<int> CompleteAsync();
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync(); // تأكيد المعاملة
+        Task RollbackTransactionAsync();
     }
 }
